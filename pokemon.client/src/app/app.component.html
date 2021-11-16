@@ -1,0 +1,100 @@
+<div style="background: url('/assets/image/forest.jpg') round">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="pokemon py-3 w-100">Pokemon</h1>
+            </div>
+        </div>
+        <div class="row py-4">
+            <div class="col-12 col-lg-9">
+                <!-- <div class="text-center fw-bold">
+                    <ng-container *ngIf="_mapPokemon !== null">
+                        <p>Map {{ _mapPokemon?.rows}} hàng x {{_mapPokemon?.cols}} cột</p>
+                    </ng-container>
+                </div> -->
+                <div class="d-flex flex-row flex-wrap position-relative" [style.width]="_mapWidthPx + 'px'" [style.height]="_mapHeightPx+ 'px'">
+                    <ng-container *ngIf="_mapPokemon !== null;else LoadMap">
+                        <ng-container *ngFor="let point of _mapPokemon?.points; index as idx">
+                            <div (click)="addPos(point)" class="border d-flex position-relative" [style.width]="_width + 'px'" [style.height]="_height + 'px'" style="background-color: #badc58;">
+                                <ng-container *ngIf="!point.walkable; else walkableStep">
+                                    <img [style.width]="_width + 'px'" [style.height]="_height + 'px'" src="/assets/image/wall.png">
+                                </ng-container>
+                                <ng-template #walkableStep>
+                                    <ng-container *ngFor="let food of listFoodEat">
+                                        <div *ngIf="point.x == food.x && point.y== food.y" class="d-flex position-absolute" style="z-index: 100;top: 0;left: 0;">
+                                            <img [style.width]="_width + 'px'" [style.height]="_height + 'px'" src="/assets/image/food.png">
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngFor="let food of listPointWent">
+                                        <div *ngIf="point.x == food.x && point.y== food.y" class="d-flex position-absolute" style="z-index: 101;top: 0;left: 0;">
+                                            <img [style.width]="_width + 'px'" [style.height]="_height + 'px'" src="/assets/image/checked.png">
+                                        </div>
+                                    </ng-container>
+                                </ng-template>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #LoadMap>
+                        <p>Chưa có Map</p>
+                    </ng-template>
+                    <ng-container *ngIf="listRoute.length > 0">
+                        <app-pokemon-child [top]="(_height * currentPos.x)" [left]="(_width * currentPos.y)" [_height]="_height" [_width]="_width"></app-pokemon-child>
+                    </ng-container>
+                </div>
+            </div>
+            <div class=" col-12 col-lg-3 ">
+                <div class="border p-2 my-1 rounded" style="background-color: rgba(162, 155, 254,0.6);">
+                    <div class="mb-3 ">
+                        <label for=" " class="form-label ">Nhập M, N (số) để tạo Map</label>
+                        <div class="input-group ">
+                            <input type="number" class="form-control shadow-none " [(ngModel)]="rowsCreate" placeholder="Rows ">
+                            <span class="input-group-text ">@</span>
+                            <input type="number" class="form-control shadow-none " [(ngModel)]="colsCreate" placeholder="Cols ">
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm shadow-none rounded-pill px-3 py-2 " (click)="createMapPokemon()">Create Map</button>
+                    </div>
+                </div>
+                <div class="border p-2 my-1 rounded" style="background-color: rgba(162, 155, 254,0.6);">
+                    <div class="mb-3 ">
+                        <label for=" " class="form-label ">Nhập Id để Get Map</label>
+                        <div class="input-group ">
+                            <input type="number" class="form-control shadow-none " [(ngModel)]="_idMap" placeholder="Id Map ">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-primary btn-sm shadow-none rounded-pill px-3 py-2" (click)="getMapPokemon()">Get Map</button>
+                        <ng-container *ngIf="isModify; else modifyMapE">
+                            <button class="btn btn-success btn-sm shadow-none rounded-pill px-3 py-2" (click)="updateMap()">Save Map</button>
+                        </ng-container>
+                        <ng-template #modifyMapE>
+                            <button class="btn btn-primary btn-sm shadow-none rounded-pill px-3 py-2" (click)="modifyMap()">Modify Map</button>
+                        </ng-template>
+
+                    </div>
+                </div>
+                <div class="border p-2 my-1 rounded" style="background-color: rgba(162, 155, 254,0.6);">
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-info btn-sm shadow-none rounded-pill px-3 py-2 " (click)="getListRoutePokemon()">Start</button>
+                        <button class="btn btn-success btn-sm shadow-none rounded-pill px-3 py-2 " (click)="continueSearchRoute()">Continue</button>
+                        <button class="btn btn-danger btn-sm shadow-none rounded-pill px-3 py-2 " (click)="stopSearchRoute()">Stop</button>
+                        <button class="btn btn-warning btn-sm shadow-none rounded-pill px-3 py-2 " (click)="resetSearch()">Reset</button>
+                    </div>
+                </div>
+                <div class="border p-2 my-1 rounded" style="background-color: rgba(162, 155, 254,0.6);">
+                    <div class="fw-bold text-center">Kết quả</div>
+                    <div>Số lượng điểm đi: {{ listFoodEat.length}}</div>
+                    <div>Vị trí hiện tại: {{ currentPos.x }} - {{ currentPos.y }}</div>
+                    <div>Tổng bước đi là: {{ listRoute.length}}</div>
+                    <div>Điểm đã đi qua:</div>
+                    <ng-container *ngFor="let point of listPointWent;">
+                        <span>({{ point.x}} - {{ point.y }})  </span>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<app-toast [isShowToast]="isShowToast" [content]="content"></app-toast>

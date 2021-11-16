@@ -1,0 +1,85 @@
+<div style="background-color: #F8EFBA;">
+    <div class="container">
+        <div class="row p-0 m-0" style="background: linear-gradient(to right, #ef3b36, #ffffff);">
+            <div class="col-12">
+                <h1 class="pokemon py-3 w-100">Pokemon</h1>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 col-lg-9">
+                <div class="text-center fw-bold">
+                    <ng-container *ngIf="_mapPokemon !== null">
+                        <p>Map {{ _mapPokemon?.rows}} hàng x {{_mapPokemon?.cols}} cột</p>
+                    </ng-container>
+                </div>
+                <div class="d-flex flex-row flex-wrap position-relative" [style.width]="_mapWidthPx + 'px'" [style.height]="_mapHeightPx+ 'px'">
+                    <ng-container *ngIf="_mapPokemon !== null;else LoadMap">
+                        <ng-container *ngFor="let point of _mapPokemon?.data; index as idx">
+                            <div (click)="addPos(point)" class="border d-flex" [style.width]="_width + 'px'" [style.height]="_height + 'px'" style="background-color: #badc58;">
+                                <ng-container *ngIf="!point.walkable; else walkableStep">
+                                    <img [style.width]="_width + 'px'" [style.height]="_height + 'px'" src="/assets/image/walkable.jpg">
+                                </ng-container>
+                                <ng-template #walkableStep>
+                                    <ng-container *ngFor="let food of listFoodEat">
+                                        <div *ngIf="point.x == food.x && point.y== food.y" class="d-flex" style="z-index: 100;">
+                                            <img [style.width]="_width + 'px'" [style.height]="_height + 'px'" src="/assets/image/food.png">
+                                        </div>
+                                    </ng-container>
+                                </ng-template>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                    <ng-template #LoadMap>
+                        <p>Chưa có Map</p>
+                    </ng-template>
+                    <app-pokemon-child [top]="(_height * currentPos.x)" [left]="(_width * currentPos.y)" [_height]="_height" [_width]="_width"></app-pokemon-child>
+                </div>
+            </div>
+            <div class=" col-12 col-lg-3 ">
+                <div class="border p-2 ">
+                    <div>Độ dài list: {{ listFoodEat.length}}</div>
+                </div>
+                <div class="border p-2 ">
+                    <div class="mb-3 ">
+                        <label for=" " class="form-label ">Nhập M, N (số) để tạo Map</label>
+                        <div class="input-group ">
+                            <input type="number " class="form-control shadow-none " [(ngModel)]="rowsCreate" placeholder="Rows ">
+                            <span class="input-group-text ">@</span>
+                            <input type="number " class="form-control shadow-none " [(ngModel)]="colsCreate" placeholder="Cols ">
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-primary btn-sm shadow-none rounded-pill px-3 py-2 " (click)="createMapPokemon()">Create Map</button>
+                    </div>
+                </div>
+                <div class="border my-2 p-2 ">
+                    <div class="mb-3 ">
+                        <label for=" " class="form-label ">Nhập Id để Get Map</label>
+                        <div class="input-group ">
+                            <input type="number" class="form-control shadow-none " [(ngModel)]="_idMap" placeholder="Id Map ">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-outline-primary btn-sm shadow-none rounded-pill px-3 py-2" (click)="getMapPokemon(_idMap)">Get Map</button>
+                        <ng-container *ngIf="isModify; else modifyMapE">
+                            <button class="btn btn-outline-success btn-sm shadow-none rounded-pill px-3 py-2" (click)="saveMap()">Save Map</button>
+                        </ng-container>
+                        <ng-template #modifyMapE>
+                            <button class="btn btn-outline-primary btn-sm shadow-none rounded-pill px-3 py-2" (click)="modifyMap()">Modify Map</button>
+                        </ng-template>
+
+                    </div>
+                </div>
+                <div class="border p-2 ">
+                    <div class="d-flex justify-content-between mt-2">
+                        <button class="btn btn-info btn-sm shadow-none rounded-pill px-3 py-2 " (click)="getListRoutePokemon()">Start</button>
+                        <button class="btn btn-danger btn-sm shadow-none rounded-pill px-3 py-2 " (click)="continueSearchRoute()">Continue</button>
+                        <button class="btn btn-danger btn-sm shadow-none rounded-pill px-3 py-2 " (click)="stopSearchRoute()">Stop</button>
+                        <button class="btn btn-warning btn-sm shadow-none rounded-pill px-3 py-2 " (click)="resetSearch()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-toast [isShowToast]="isShowToast" [content]="content"></app-toast>

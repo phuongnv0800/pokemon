@@ -1,0 +1,29 @@
+@import url(//db.onlinewebfonts.com/c/f4d1593471d222ddebd973210265762a?family=Pokemon);
+.pokemon {
+    font-family: "Pokemon";
+    text-align: center;
+    margin: 0;
+    letter-spacing: 0.3rem;
+    color: #0c2461;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.border {
+    background-color: #CAD3C8;
+}
+
+.pokemon-child {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

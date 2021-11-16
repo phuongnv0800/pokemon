@@ -1,0 +1,13 @@
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast" [class.show]="isShowToast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img width="50px" height="50px" src="/assets/image/vit.png" class="rounded me-2" alt="thông báo">
+            <strong class="me-auto">Thông báo</strong>
+            <small>11 sescond ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" (click)="isShowToast=false"></button>
+        </div>
+        <div class="toast-body">
+            {{ content}}
+        </div>
+    </div>
+</div>
